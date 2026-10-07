@@ -1,0 +1,28 @@
+{
+  "case": "curved_multi_branch_coupling",
+  "model_type": "bp",
+  "seed": 123,
+  "kappa": 0.6,
+  "sigma_min": 0.02,
+  "sigma_max": 0.7,
+  "gamma_max": 0.1,
+  "t_eps": 0.001,
+  "curve_points": 2000,
+  "steps": 30000,
+  "batch_size": 256,
+  "hidden": 192,
+  "depth": 3,
+  "learning_rate": 0.0002,
+  "optimizer": "AdamW",
+  "weight_decay": 0.0,
+  "gradient_clip": 1.0,
+  "loss_weights": {
+    "score": 1.0,
+    "bridge": 0.5,
+    "transport": 0.25,
+    "endpoint": 5.0,
+    "correction_regularization": 0.0001
+  },
+  "parameters": 301062,
+  "checkpoint_role": "three_head_endpoint_aware"
+}

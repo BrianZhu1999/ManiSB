@@ -1,0 +1,27 @@
+Environment used for the archived Case II run
+================================================
+
+Host: super-server
+Recorded Python executable: /home/zzy/anaconda3/envs/torch312env/bin/python
+Python: 3.12.2
+PyTorch: 2.6.0+cu118
+Torch CUDA build: 11.8
+NumPy: 2.2.6
+SciPy: 1.16.0
+Matplotlib: 3.10.3
+Pandas: 2.2.3
+scikit-learn: 1.6.1
+Jupyter: 1.1.1
+JupyterLab: 4.4.1
+IPyKernel: 6.29.5
+
+GPU inventory at verification time
+-----------------------------------
+4 x NVIDIA GeForce RTX 4090
+Driver: 535.309.01
+Memory per GPU: 24564 MiB
+
+The archived figure export itself was performed on the server CPU with two
+Torch threads, as recorded in results/data_audit_archived.json. The GPU
+entries above describe the reproducibility environment and are not a claim
+that the archived figure export used all four GPUs.

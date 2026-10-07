@@ -1,0 +1,105 @@
+{
+  "canvas_mm": [
+    340.0,
+    90.0
+  ],
+  "source_sha256": "759cfa8c87114d5b118f11dba0e67913fc642d15fb706cccf28b379c4acf112f",
+  "training_seed": 1234,
+  "evaluation_seed": 20261002,
+  "detail": {
+    "detail_sample_id": 229,
+    "detail_time": 0.5,
+    "detail_extent": [
+      -0.2339058518409729,
+      -0.04640079289674759,
+      -0.6571446657180786,
+      -0.4696396291255951
+    ]
+  },
+  "metric_axes": [
+    {
+      "metric": "endpoint",
+      "scale": "linear",
+      "limits": [
+        0.0,
+        0.04411718081682921
+      ],
+      "n_values": 1024,
+      "all_values_within_axes": true
+    },
+    {
+      "metric": "support",
+      "scale": "linear",
+      "limits": [
+        0.0,
+        0.15285321828532855
+      ],
+      "n_values": 1024,
+      "all_values_within_axes": true
+    }
+  ],
+  "text_outside_canvas": [],
+  "typography_violations": [],
+  "text_collisions": [],
+  "parameters": 130566,
+  "statistics": "Same 1024 endpoint pairs and same initial noise. Boxes describe samples from one existing checkpoint; diamonds mark means.",
+  "full_range": true,
+  "aggregate": {
+    "triad": {
+      "mean_endpoint_distance": 0.013588586822152138,
+      "coordinate_rmse": 0.010753895156085491,
+      "mean_support_distance": 0.03416392794158611,
+      "mean_excess_length": 0.017072413116693497,
+      "mean_turning_degrees": 115.40786429059068,
+      "legacy_turning_degrees": 139.42837524414062,
+      "inference_seconds": 0.1257108082063496,
+      "full_model_calls": 60
+    },
+    "corrected": {
+      "mean_endpoint_distance": 0.009254753589630127,
+      "coordinate_rmse": 0.0071215457282960415,
+      "mean_support_distance": 0.012174196308386917,
+      "mean_excess_length": 0.012522401288151741,
+      "mean_turning_degrees": 154.1406618131848,
+      "legacy_turning_degrees": 170.73704528808594,
+      "inference_seconds": 0.24378712614998221,
+      "full_model_calls": 120
+    }
+  },
+  "discretization": {
+    "triad": {
+      "mean_support_9600": 0.034100294307023826,
+      "change_from_1200": -6.36336345622851e-05
+    },
+    "corrected": {
+      "mean_support_9600": 0.011956963088351914,
+      "change_from_1200": -0.00021723322003500307
+    }
+  },
+  "fonts": [
+    [
+      25,
+      "ttf",
+      "Type0",
+      "CWKGXT+ArialMT",
+      "F1",
+      "Identity-H"
+    ],
+    [
+      32,
+      "ttf",
+      "Type0",
+      "CWKGXT+Arial-BoldMT",
+      "F3",
+      "Identity-H"
+    ],
+    [
+      39,
+      "ttf",
+      "Type0",
+      "GIEZYS+Arial-ItalicMT",
+      "F2",
+      "Identity-H"
+    ]
+  ]
+}

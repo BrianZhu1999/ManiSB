@@ -1,0 +1,39 @@
+{
+  "status": "pass",
+  "data_sha256": "31d5a0e381298387fd82b2bd176c9d37dca385ee9f19e077e00dbf9ddeac746a",
+  "array_shapes": {
+    "clean": [
+      4096,
+      2
+    ],
+    "degraded": [
+      4096,
+      2
+    ],
+    "trajectory_no_projection": [
+      21,
+      4096,
+      2
+    ],
+    "trajectory_projection": [
+      21,
+      4096,
+      2
+    ],
+    "final_no_projection": [
+      4096,
+      2
+    ],
+    "final_projection": [
+      4096,
+      2
+    ]
+  },
+  "final_replay_max_abs_error": {
+    "final_no_projection": 0.0,
+    "final_projection": 0.0
+  },
+  "kappa": 0.6,
+  "reverse_updates": 20,
+  "projection_strength_max": 0.02
+}

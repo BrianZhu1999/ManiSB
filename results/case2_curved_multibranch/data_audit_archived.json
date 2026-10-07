@@ -1,0 +1,126 @@
+{
+  "server": "super-server",
+  "execution_device": "CPU, two Torch threads",
+  "archive": "/home/zzy/pythonprojects/BP-GI2SB/paper_figure_exports_20260801/toy_case2_checkpoint_trajectories.npz",
+  "archive_sha256": "31d5a0e381298387fd82b2bd176c9d37dca385ee9f19e077e00dbf9ddeac746a",
+  "checkpoint_sha256": {
+    "/home/zzy/pythonprojects/BP-GI2SB/runs_toy_curved_bp_endpoint_v4/checkpoints/latest.pt": "8fae449885096961ca78482a3e8d647066a319857c7cb1a63246ffc7adbda56f",
+    "/home/zzy/pythonprojects/BP-GI2SB/runs_toy_curved_single_v2/checkpoints/latest.pt": "0e7b53b45807667a87fa2f7954c7c677ccf5a98a3e34f1fc75eee7452524907b"
+  },
+  "export_script_sha256": "918a615036477583287d405d4b49af11fb184b5e5e185668eb0f88d3d72c01a6",
+  "archive_replay_max_abs_error": {},
+  "configs": {
+    "triad": {
+      "outdir": "runs_toy_curved_bp_v2",
+      "device": "cpu",
+      "seed": 123,
+      "model_type": "bp",
+      "kappa": 0.6,
+      "sigma_min": 0.02,
+      "sigma_max": 0.7,
+      "gamma_max": 0.1,
+      "t_eps": 0.001,
+      "curve_points": 2000,
+      "steps": 30000,
+      "batch_size": 256,
+      "hidden": 192,
+      "depth": 3,
+      "lr": 0.0002,
+      "weight_decay": 0.0,
+      "grad_clip": 1.0,
+      "detach_m_for_heads": false,
+      "lambda_score": 1.0,
+      "lambda_bridge": 0.5,
+      "lambda_transport": 0.25,
+      "lambda_endpoint": 5.0,
+      "lambda_corr": 0.0001,
+      "log_every": 100,
+      "save_every": 5000
+    },
+    "single": {
+      "outdir": "runs_toy_curved_single_v2",
+      "device": "cuda",
+      "seed": 123,
+      "model_type": "single",
+      "kappa": 0.6,
+      "sigma_min": 0.02,
+      "sigma_max": 0.7,
+      "gamma_max": 0.1,
+      "t_eps": 0.001,
+      "curve_points": 2000,
+      "steps": 50000,
+      "batch_size": 1024,
+      "hidden": 192,
+      "depth": 3,
+      "lr": 0.0002,
+      "weight_decay": 0.0,
+      "grad_clip": 1.0,
+      "detach_m_for_heads": false,
+      "lambda_score": 1.0,
+      "lambda_bridge": 2.0,
+      "lambda_transport": 1.0,
+      "lambda_endpoint": 0.2,
+      "lambda_corr": 0.0001,
+      "log_every": 100,
+      "save_every": 5000
+    }
+  },
+  "checkpoint_steps": {
+    "triad": 50000,
+    "single": 50000
+  },
+  "parameters": {
+    "triad": 301062,
+    "single": 112706
+  },
+  "training_seeds": [
+    123
+  ],
+  "evaluation_seed": 2026,
+  "n_samples": 4096,
+  "reverse_steps": 20,
+  "projection_strength": 0.02,
+  "network_calls": {
+    "Single head": 20,
+    "TriadBridge": 20,
+    "Triad + projection": 40
+  },
+  "component_sample_id": 1080,
+  "component_time": 0.5,
+  "component_norms": {
+    "sA": 0.05128498747944832,
+    "sB": 0.6713836193084717,
+    "sC": 0.13266780972480774
+  },
+  "component_closure_max": 1.7881393432617188e-07,
+  "aggregate_metrics": {
+    "Single head": {
+      "endpoint_rmse": 0.09143368154764175,
+      "mean_endpoint_distance": 0.02489457279443741,
+      "trajectory_support_distance": 0.0805903207331406,
+      "excess_path_length": 0.0027232766151428223,
+      "branch_accuracy": 0.994140625,
+      "branch_errors": 24,
+      "n": 4096
+    },
+    "TriadBridge": {
+      "endpoint_rmse": 0.08623495697975159,
+      "mean_endpoint_distance": 0.01900651305913925,
+      "trajectory_support_distance": 0.07382267869553144,
+      "excess_path_length": 0.0010451310081407428,
+      "branch_accuracy": 0.99462890625,
+      "branch_errors": 22,
+      "n": 4096
+    },
+    "Triad + projection": {
+      "endpoint_rmse": 0.08559588342905045,
+      "mean_endpoint_distance": 0.01981460303068161,
+      "trajectory_support_distance": 0.06649173766805538,
+      "excess_path_length": 0.0035659458953887224,
+      "branch_accuracy": 0.99462890625,
+      "branch_errors": 22,
+      "n": 4096
+    }
+  },
+  "interpretation": "One trained checkpoint per architecture; sample distributions are not training-seed uncertainty. The archived baseline is an MLP control, not original I2SB. Projection calls the learned bridge head; analytical curves are evaluation references only."
+}

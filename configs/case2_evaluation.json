@@ -1,0 +1,23 @@
+{
+  "case": "curved_multi_branch_coupling",
+  "training_seed": 123,
+  "evaluation_seed": 2026,
+  "kappa": 0.6,
+  "reverse_updates": 20,
+  "endpoint_pairs": 4096,
+  "projection_strength_max": 0.02,
+  "projection_schedule": "sin2",
+  "projection_calls": {
+    "single_head": 0,
+    "triadbridge": 0,
+    "triad_plus_projection": 20
+  },
+  "checkpoint_selection": "final checkpoint used by the archived figure export",
+  "metrics": [
+    "endpoint_rmse",
+    "mean_endpoint_distance",
+    "trajectory_support_distance",
+    "excess_path_length",
+    "branch_accuracy"
+  ]
+}

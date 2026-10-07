@@ -1,0 +1,167 @@
+{
+  "project": "ManiSB",
+  "root": "C:\\Users\\Administrator\\Desktop\\流形感知薛定谔桥\\ManiSB_GitHub_20261005",
+  "status": "passed",
+  "errors": [],
+  "case1": {
+    "path": "data/case1_smooth_closed/closed_coupling_data.npz",
+    "status": "ok",
+    "arrays": {
+      "theta": [
+        1024
+      ],
+      "target": [
+        1024,
+        2
+      ],
+      "terminal": [
+        1024,
+        2
+      ],
+      "initial": [
+        1024,
+        2
+      ],
+      "target_curve": [
+        1200,
+        2
+      ],
+      "terminal_curve": [
+        1200,
+        2
+      ],
+      "support_curves": [
+        61,
+        1200,
+        2
+      ],
+      "times": [
+        61
+      ],
+      "selected_ids": [
+        8
+      ],
+      "detail_sample_id": [
+        1
+      ],
+      "trajectory_triad": [
+        61,
+        1024,
+        2
+      ],
+      "endpoint_triad": [
+        1024
+      ],
+      "support_triad": [
+        1024
+      ],
+      "support_time_triad": [
+        61,
+        1024
+      ],
+      "excess_triad": [
+        1024
+      ],
+      "turning_triad": [
+        1024
+      ],
+      "trajectory_corrected": [
+        61,
+        1024,
+        2
+      ],
+      "endpoint_corrected": [
+        1024
+      ],
+      "support_corrected": [
+        1024
+      ],
+      "support_time_corrected": [
+        61,
+        1024
+      ],
+      "excess_corrected": [
+        1024
+      ],
+      "turning_corrected": [
+        1024
+      ]
+    },
+    "sha256": "759cfa8c87114d5b118f11dba0e67913fc642d15fb706cccf28b379c4acf112f"
+  },
+  "case2": {
+    "path": "data/case2_curved_multibranch/toy_case2_checkpoint_trajectories.npz",
+    "status": "ok",
+    "arrays": {
+      "seed": [
+        1
+      ],
+      "clean": [
+        4096,
+        2
+      ],
+      "degraded": [
+        4096,
+        2
+      ],
+      "branch": [
+        4096
+      ],
+      "t_values": [
+        5
+      ],
+      "branch_values": [
+        2
+      ],
+      "bridge_curves": [
+        2,
+        5,
+        2500,
+        2
+      ],
+      "times_no_projection": [
+        21
+      ],
+      "times_projection": [
+        21
+      ],
+      "trajectory_no_projection": [
+        21,
+        4096,
+        2
+      ],
+      "trajectory_projection": [
+        21,
+        4096,
+        2
+      ],
+      "final_no_projection": [
+        4096,
+        2
+      ],
+      "final_projection": [
+        4096,
+        2
+      ],
+      "rho_max": [
+        1
+      ],
+      "nfe": [
+        1
+      ],
+      "kappa": [
+        1
+      ],
+      "training_step": [
+        1
+      ],
+      "hidden_width": [
+        1
+      ],
+      "depth": [
+        1
+      ]
+    },
+    "sha256": "31d5a0e381298387fd82b2bd176c9d37dca385ee9f19e077e00dbf9ddeac746a"
+  }
+}

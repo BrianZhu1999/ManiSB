@@ -1,0 +1,30 @@
+{
+  "case": "smooth_closed_coupling",
+  "paper_section": "Section 5.1",
+  "paper_figure": "fig_smooth_closed_coupling.pdf",
+  "task": "conditional endpoint transport with learned geometric correction",
+  "data_file": "data/case1_smooth_closed/closed_coupling_data.npz",
+  "endpoint_pairs": 1024,
+  "training_seed": 1234,
+  "training_steps": 20000,
+  "evaluation_seed": 20261002,
+  "reverse_updates": 60,
+  "correction_strength": 0.12,
+  "model_parameters": 130566,
+  "comparison": "same three-head model before and after correction",
+  "metrics": {
+    "mean_endpoint_distance": {
+      "without_correction": 0.01359,
+      "with_correction": 0.00925
+    },
+    "mean_support_distance": {
+      "without_correction": 0.03416,
+      "with_correction": 0.01217
+    },
+    "coordinate_pair_rmse": {
+      "without_correction": 0.01075,
+      "with_correction": 0.00712
+    }
+  },
+  "scope": "correction ablation; no parameter-matched single-head comparison"
+}

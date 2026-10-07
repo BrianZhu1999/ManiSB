@@ -1,0 +1,27 @@
+{
+  "project_name": "ManiSB",
+  "package_version": "2026.10.05",
+  "cases": [
+    {
+      "id": "case1_smooth_closed",
+      "name": "Smooth closed coupling",
+      "data": "data/case1_smooth_closed/closed_coupling_data.npz",
+      "config": "configs/case1_swirl.json",
+      "figure": "figures/paper/fig_smooth_closed_coupling.pdf"
+    },
+    {
+      "id": "case2_curved_multibranch",
+      "name": "Curved multi-branch coupling",
+      "data": "data/case2_curved_multibranch/toy_case2_checkpoint_trajectories.npz",
+      "configs": [
+        "configs/case2_single.json",
+        "configs/case2_triad.json",
+        "configs/case2_evaluation.json"
+      ],
+      "figure": "figures/paper/fig3_multibranch_linear_v5.pdf"
+    }
+  ],
+  "training_policy": "Formal runs are archived with configurations, derived data, and verification records.",
+  "weights_policy": "binary checkpoints are stored outside the Git package",
+  "validation_entrypoint": "code/verify_project.py"
+}

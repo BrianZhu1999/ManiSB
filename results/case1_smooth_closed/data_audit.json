@@ -1,0 +1,100 @@
+{
+  "host": "Super-Server",
+  "device": "CPU, 2 threads",
+  "checkpoint": "/home/zzy/pythonprojects/BP-GI2SB/toy_outputs_gpu_straightness/bp_gi2sb_toy_model.pt",
+  "checkpoint_sha256": "407bb9a1b96cb9898e3d3dfb7de05cf7f310a29722e527353f168866f3843dcc",
+  "original_archive_sha256": "e4bc695e44e9dfdfe2fafa7fc38439ce2272527c035d5b48c78c1d7e4e685edf",
+  "original_code_sha256": "44f3c51ede06a91e5084da7ff3925e70858c4dd7683fc8186334358b8f985ed3",
+  "export_code_sha256": "2db654a08f6a44d41fa001c35d88368648298fd2c2f13d2fceb45503c96a892b",
+  "archive_replay_max_abs_error": {
+    "no_projection": 9.5367431640625e-07,
+    "projection": 4.76837158203125e-07
+  },
+  "original_initial_noise_equal": true,
+  "case": "Original smooth closed coupling (swirl)",
+  "config": {
+    "outdir": "toy_outputs_gpu_straightness",
+    "kind": "swirl",
+    "device": "cuda",
+    "seed": 1234,
+    "steps": 20000,
+    "batch_size": 1024,
+    "lr": 0.002,
+    "hidden": 128,
+    "depth": 3,
+    "sigma_min": 0.02,
+    "sigma_max": 0.35,
+    "t_eps": 0.02,
+    "gamma_max": 0.15,
+    "rho_max": 0.12,
+    "lambda_score": 1.0,
+    "lambda_bridge": 1.0,
+    "lambda_transport": 1.0,
+    "lambda_endpoint": 0.1,
+    "lambda_corr": 0.001,
+    "log_every": 200,
+    "traj_steps": 60,
+    "no_stop_bridge_grad": false,
+    "eval_samples": 1024,
+    "eval_dense": 1200,
+    "eval_rho_values": [
+      0.0,
+      0.04,
+      0.08,
+      0.12,
+      0.2
+    ],
+    "eval_nfe_values": [
+      5,
+      10,
+      20,
+      40,
+      60
+    ]
+  },
+  "training_seed": 1234,
+  "new_training": false,
+  "parameters": 130566,
+  "evaluation_seed": 20261002,
+  "samples": 1024,
+  "reverse_steps": 60,
+  "correction_strength": 0.12,
+  "same_endpoint_pairs": true,
+  "same_initial_noise": true,
+  "inference_without_generator": true,
+  "support_curve_points": 1200,
+  "discretization": {
+    "triad": {
+      "mean_support_9600": 0.034100294307023826,
+      "change_from_1200": -6.36336345622851e-05
+    },
+    "corrected": {
+      "mean_support_9600": 0.011956963088351914,
+      "change_from_1200": -0.00021723322003500307
+    }
+  },
+  "metrics": {
+    "triad": {
+      "mean_endpoint_distance": 0.013588586822152138,
+      "coordinate_rmse": 0.010753895156085491,
+      "mean_support_distance": 0.03416392794158611,
+      "mean_excess_length": 0.017072413116693497,
+      "mean_turning_degrees": 115.40786429059068,
+      "legacy_turning_degrees": 139.42837524414062,
+      "inference_seconds": 0.1257108082063496,
+      "full_model_calls": 60
+    },
+    "corrected": {
+      "mean_endpoint_distance": 0.009254753589630127,
+      "coordinate_rmse": 0.0071215457282960415,
+      "mean_support_distance": 0.012174196308386917,
+      "mean_excess_length": 0.012522401288151741,
+      "mean_turning_degrees": 154.1406618131848,
+      "legacy_turning_degrees": 170.73704528808594,
+      "inference_seconds": 0.24378712614998221,
+      "full_model_calls": 120
+    }
+  },
+  "data_sha256": "759cfa8c87114d5b118f11dba0e67913fc642d15fb706cccf28b379c4acf112f",
+  "metric_note": "Endpoint distance is Euclidean. Historical paired RMSE is coordinate-wise RMS, not mean Euclidean distance. Legacy turning adds 1e-8 to a dot-product denominator and can inflate angles; both legacy and normalized-vector values are retained."
+}

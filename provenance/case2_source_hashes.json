@@ -1,0 +1,38 @@
+{
+  "generated_on": "2026-10-05",
+  "source_host": "super-server",
+  "source_repository": "/home/zzy/pythonprojects/BP-GI2SB",
+  "files": {
+    "code/train_curved_multibranch_toy_v2.py": {
+      "sha256": "0421149b00ce41ea62f283571014b6d22c929ca79450537b4ab4dcf267bfe2c5",
+      "origin": "train_curved_multibranch_toy_v2.py"
+    },
+    "code/eval_curved_multibranch_toy_v2.ipynb": {
+      "sha256": "fc51b1743b7dd72c80a0118ba3ee6a6ea7353430d965226e31db55fab0bbbb66",
+      "origin": "portable package copy of eval_curved_multibranch_toy_v2.ipynb"
+    },
+    "code/export_checkpoint_toy_data.py": {
+      "sha256": "f3e10a0d2dee273001605084716b33fb3b0864e600036d84dfab361373baaef2",
+      "origin": "paper_figure_exports_20260801/export_checkpoint_toy_data.py"
+    },
+    "data/toy_case2_checkpoint_trajectories.npz": {
+      "sha256": "31d5a0e381298387fd82b2bd176c9d37dca385ee9f19e077e00dbf9ddeac746a",
+      "origin": "paper_figure_exports_20260801/toy_case2_checkpoint_trajectories.npz"
+    },
+    "checkpoint_single_head": {
+      "sha256": "0e7b53b45807667a87fa2f7954c7c677ccf5a98a3e34f1fc75eee7452524907b",
+      "origin": "runs_toy_curved_single_v2/checkpoints/latest.pt"
+    },
+    "checkpoint_three_head": {
+      "sha256": "8fae449885096961ca78482a3e8d647066a319857c7cb1a63246ffc7adbda56f",
+      "origin": "runs_toy_curved_bp_endpoint_v4/checkpoints/latest.pt"
+    }
+  },
+  "metadata_authority": {
+    "three_head_steps": "direct checkpoint payload: 30000; an older figure audit recorded 50000",
+    "three_head_parameters": 301062,
+    "single_head_parameters": 112706,
+    "training_seed": 123,
+    "evaluation_seed": 2026
+  }
+}

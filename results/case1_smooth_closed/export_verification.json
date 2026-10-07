@@ -1,0 +1,96 @@
+{
+  "status": "pass",
+  "data": "data\\case1_smooth_closed\\closed_coupling_data.npz",
+  "data_arrays": {
+    "theta": [
+      1024
+    ],
+    "target": [
+      1024,
+      2
+    ],
+    "terminal": [
+      1024,
+      2
+    ],
+    "initial": [
+      1024,
+      2
+    ],
+    "target_curve": [
+      1200,
+      2
+    ],
+    "terminal_curve": [
+      1200,
+      2
+    ],
+    "support_curves": [
+      61,
+      1200,
+      2
+    ],
+    "times": [
+      61
+    ],
+    "selected_ids": [
+      8
+    ],
+    "detail_sample_id": [
+      1
+    ],
+    "trajectory_triad": [
+      61,
+      1024,
+      2
+    ],
+    "endpoint_triad": [
+      1024
+    ],
+    "support_triad": [
+      1024
+    ],
+    "support_time_triad": [
+      61,
+      1024
+    ],
+    "excess_triad": [
+      1024
+    ],
+    "turning_triad": [
+      1024
+    ],
+    "trajectory_corrected": [
+      61,
+      1024,
+      2
+    ],
+    "endpoint_corrected": [
+      1024
+    ],
+    "support_corrected": [
+      1024
+    ],
+    "support_time_corrected": [
+      61,
+      1024
+    ],
+    "excess_corrected": [
+      1024
+    ],
+    "turning_corrected": [
+      1024
+    ]
+  },
+  "svg_text_count": 30,
+  "raster_sizes": {
+    "png": [
+      8031,
+      2125
+    ],
+    "tiff": [
+      8031,
+      2125
+    ]
+  }
+}

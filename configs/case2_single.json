@@ -1,0 +1,25 @@
+{
+  "case": "curved_multi_branch_coupling",
+  "model_type": "single",
+  "seed": 123,
+  "kappa": 0.6,
+  "sigma_min": 0.02,
+  "sigma_max": 0.7,
+  "gamma_max": 0.1,
+  "t_eps": 0.001,
+  "curve_points": 2000,
+  "steps": 50000,
+  "batch_size": 1024,
+  "hidden": 192,
+  "depth": 3,
+  "learning_rate": 0.0002,
+  "optimizer": "AdamW",
+  "weight_decay": 0.0,
+  "gradient_clip": 1.0,
+  "loss_weights": {
+    "score": 1.0,
+    "endpoint": 0.2
+  },
+  "parameters": 112706,
+  "checkpoint_role": "single_head_reference"
+}

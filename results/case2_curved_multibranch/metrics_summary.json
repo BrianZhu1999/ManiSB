@@ -1,0 +1,47 @@
+{
+  "case": "curved_multi_branch_coupling",
+  "source": "per_sample_metrics.csv",
+  "aggregation": {
+    "unit": "endpoint pair",
+    "sample_count_per_method": 4096,
+    "mean": "arithmetic mean over endpoint pairs",
+    "standard_deviation": "sample standard deviation over endpoint pairs",
+    "branch_correct": "mean of the binary branch-correct indicator"
+  },
+  "metrics": {
+    "endpoint_l2_error": "Euclidean distance from the generated endpoint to its paired clean endpoint",
+    "support_distance": "distance from the generated endpoint to the analytic clean support",
+    "excess_length": "generated path length minus its endpoint chord length",
+    "branch_correct": "binary indicator for the closest analytic branch"
+  },
+  "methods": {
+    "Single head": {
+      "n": 4096,
+      "endpoint_l2_error_mean": 0.024894573536968778,
+      "endpoint_l2_error_std": 0.0879901617294416,
+      "support_distance_mean": 0.08059032073314086,
+      "support_distance_std": 0.043812915436875786,
+      "excess_length_mean": 0.002723276695178356,
+      "branch_accuracy": 0.994140625
+    },
+    "TriadBridge": {
+      "n": 4096,
+      "endpoint_l2_error_mean": 0.019006512979586887,
+      "endpoint_l2_error_std": 0.08412459829415427,
+      "support_distance_mean": 0.07382267869553134,
+      "support_distance_std": 0.04457864077127583,
+      "excess_length_mean": 0.0010451310372445732,
+      "branch_accuracy": 0.99462890625
+    },
+    "Triad + projection": {
+      "n": 4096,
+      "endpoint_l2_error_mean": 0.019814603716554302,
+      "endpoint_l2_error_std": 0.08328103285931408,
+      "support_distance_mean": 0.0664917376680553,
+      "support_distance_std": 0.041588204664560445,
+      "excess_length_mean": 0.0035659459463204257,
+      "branch_accuracy": 0.99462890625
+    }
+  },
+  "status": "archived single-seed controlled numerical case"
+}
