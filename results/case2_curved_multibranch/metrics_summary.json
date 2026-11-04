@@ -10,7 +10,7 @@
   },
   "metrics": {
     "endpoint_l2_error": "Euclidean distance from the generated endpoint to its paired clean endpoint",
-    "support_distance": "distance from the generated endpoint to the analytic clean support",
+    "support_distance": "Mean trajectory-to-support distance over all sampled time states, averaged over endpoint pairs; the support is matched to each state time",
     "excess_length": "generated path length minus its endpoint chord length",
     "branch_correct": "binary indicator for the closest analytic branch"
   },
