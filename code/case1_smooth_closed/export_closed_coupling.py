@@ -1,25 +1,18 @@
-"""重放截图对应的原模型，并用同批端点及初始噪声比较校正前后。"""
+"""Evaluate geometric correction using paired endpoints and initial noise."""
 from pathlib import Path
 from types import SimpleNamespace
+import argparse
 import csv
 import hashlib
 import json
-import socket
 import time
-
-if socket.gethostname().lower().replace('_','-')!='super-server':
-    raise RuntimeError('推理、统计和绘图只能在 super-server 执行')
 
 import numpy as np
 from scipy.spatial import cKDTree
 import torch
 import original_closed_coupling as toy
 
-ROOT=Path('/home/zzy/pythonprojects/BP-GI2SB')
-BASE=Path(__file__).resolve().parents[1]
-OUT=BASE/'data'
-ARCHIVE=ROOT/'paper_figure_exports_20260801/toy_case1_checkpoint_trajectories.npz'
-CHECKPOINT=ROOT/'toy_outputs_gpu_straightness/bp_gi2sb_toy_model.pt'
+BASE=Path(__file__).resolve().parents[2]
 
 
 def sha(path):
@@ -49,8 +42,18 @@ def turning(traj):
 
 @torch.no_grad()
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--checkpoint',type=Path,required=True)
+    parser.add_argument('--reference-archive',type=Path,required=True)
+    parser.add_argument('--root',type=Path,default=BASE)
+    options=parser.parse_args()
+    CHECKPOINT=options.checkpoint.resolve()
+    ARCHIVE=options.reference_archive.resolve()
+    OUT=options.root.resolve()/'data/case1_smooth_closed'
+    RESULTS=options.root.resolve()/'results/case1_smooth_closed'
     torch.set_num_threads(2)
-    OUT.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True,exist_ok=True)
+    RESULTS.mkdir(parents=True,exist_ok=True)
     payload=torch.load(CHECKPOINT,map_location='cpu',weights_only=False)
     args=SimpleNamespace(**payload['args'])
     assert args.kind=='swirl' and args.steps==20000
@@ -64,7 +67,7 @@ def main():
         difference=float(np.abs(trajectory.numpy()-original).max())
         replay[key]=difference
         assert difference<2e-5,(key,difference)
-    # 固定新评估批次，不改模型、步数、校正强度或旧结果。
+    # The two samplers share endpoint pairs and initial noise.
     generator=torch.Generator().manual_seed(20261002)
     theta=2*np.pi*torch.rand(1024,1,generator=generator)
     clean,terminal=toy.make_pair(theta,args.kind)
@@ -82,10 +85,10 @@ def main():
     raw['selected_ids']=np.array(ids)
     raw['detail_sample_id']=np.array([ids[5]])
     metrics,rows={},[]
-    # 推理只接收终止点和初始噪声；禁用真实生成器后应仍能完成采样。
+    # Check that sampling is independent of the analytic pair generator.
     pair_generator=toy.make_pair
     def forbidden(*args,**kwargs):
-        raise AssertionError('采样访问了真实生成器')
+        raise AssertionError('The sampler accessed the analytic pair generator.')
     toy.make_pair=forbidden
     try:
         for key,corrected in [('triad',False),('corrected',True)]:
@@ -118,7 +121,7 @@ def main():
                             turning_degrees=float(angles[i])))
     finally:
         toy.make_pair=pair_generator
-    # 对支撑距离的网格离散误差作独立检查，主数据仍使用旧代码的1200点定义。
+    # Compare the 1200-point support distances with a finer reference curve.
     fine=torch.linspace(0,2*np.pi,9600)[:,None]
     f0,f1=toy.make_pair(fine,args.kind)
     discretization={}
@@ -135,18 +138,15 @@ def main():
         writer=csv.DictWriter(file,fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    report=dict(host=socket.gethostname(),device='CPU, 2 threads',checkpoint=str(CHECKPOINT),
-        checkpoint_sha256=sha(CHECKPOINT),original_archive_sha256=sha(ARCHIVE),
-        original_code_sha256=sha(Path(toy.__file__)),export_code_sha256=sha(Path(__file__)),
-        archive_replay_max_abs_error=replay,original_initial_noise_equal=bool(np.array_equal(old['trajectory_no_projection'][0],old['trajectory_projection'][0])),
-        case='Original smooth closed coupling (swirl)',config=vars(args),
-        training_seed=args.seed,new_training=False,parameters=sum(p.numel() for p in model.parameters()),
+    report=dict(device='CPU, 2 threads',checkpoint=CHECKPOINT.name,
+        case='Smooth closed coupling (swirl)',config={key:value for key,value in vars(args).items() if key!='outdir'},
+        training_seed=args.seed,parameters=sum(p.numel() for p in model.parameters()),
         evaluation_seed=20261002,samples=1024,reverse_steps=60,correction_strength=.12,
-        same_endpoint_pairs=True,same_initial_noise=True,inference_without_generator=True,
+        same_endpoint_pairs=True,same_initial_noise=True,
         support_curve_points=1200,discretization=discretization,metrics=metrics,
         data_sha256=sha(OUT/'closed_coupling_data.npz'),
-        metric_note='Endpoint distance is Euclidean. Historical paired RMSE is coordinate-wise RMS, not mean Euclidean distance. Legacy turning adds 1e-8 to a dot-product denominator and can inflate angles; both legacy and normalized-vector values are retained.')
-    (OUT/'data_audit.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+        metric_note='Endpoint distance is Euclidean. Coordinate RMSE averages squared errors over samples and coordinates. legacy_turning_degrees uses a denominator offset of 1e-8; mean_turning_degrees uses normalized displacement vectors.')
+    (RESULTS/'data_audit.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
     print(json.dumps(report,indent=2))
 
 

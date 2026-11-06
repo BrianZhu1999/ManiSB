@@ -1,4 +1,4 @@
-"""检查 ManiSB 总包中的案例二数据、哈希和实验配置。"""
+"""Check the Case II data, file hashes, and experiment settings."""
 
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ def main() -> int:
 
     archive_hash = sha256(data_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    expected = manifest["files"]["data/toy_case2_checkpoint_trajectories.npz"]["sha256"]
+    expected = manifest["files"]["data/case2_curved_multibranch/toy_case2_checkpoint_trajectories.npz"]["sha256"]
     if archive_hash != expected:
         raise AssertionError(f"Data SHA-256 mismatch: {archive_hash} != {expected}")
 

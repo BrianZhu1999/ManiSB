@@ -26,5 +26,5 @@
       "with_correction": 0.00712
     }
   },
-  "scope": "correction ablation; no parameter-matched single-head comparison"
+  "scope": "correction ablation using one three-head checkpoint"
 }

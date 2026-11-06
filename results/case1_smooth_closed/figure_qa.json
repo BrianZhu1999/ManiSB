@@ -42,7 +42,7 @@
   "typography_violations": [],
   "text_collisions": [],
   "parameters": 130566,
-  "statistics": "Same 1024 endpoint pairs and same initial noise. Boxes describe samples from one existing checkpoint; diamonds mark means.",
+  "statistics": "1024 paired samples per method from one training seed. Boxes span the interquartile range; diamonds mark means.",
   "full_range": true,
   "aggregate": {
     "triad": {

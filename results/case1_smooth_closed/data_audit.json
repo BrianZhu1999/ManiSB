@@ -1,19 +1,8 @@
 {
-  "host": "Super-Server",
   "device": "CPU, 2 threads",
-  "checkpoint": "/home/zzy/pythonprojects/BP-GI2SB/toy_outputs_gpu_straightness/bp_gi2sb_toy_model.pt",
-  "checkpoint_sha256": "407bb9a1b96cb9898e3d3dfb7de05cf7f310a29722e527353f168866f3843dcc",
-  "original_archive_sha256": "e4bc695e44e9dfdfe2fafa7fc38439ce2272527c035d5b48c78c1d7e4e685edf",
-  "original_code_sha256": "44f3c51ede06a91e5084da7ff3925e70858c4dd7683fc8186334358b8f985ed3",
-  "export_code_sha256": "2db654a08f6a44d41fa001c35d88368648298fd2c2f13d2fceb45503c96a892b",
-  "archive_replay_max_abs_error": {
-    "no_projection": 9.5367431640625e-07,
-    "projection": 4.76837158203125e-07
-  },
-  "original_initial_noise_equal": true,
-  "case": "Original smooth closed coupling (swirl)",
+  "checkpoint": "bp_gi2sb_toy_model.pt",
+  "case": "Smooth closed coupling (swirl)",
   "config": {
-    "outdir": "toy_outputs_gpu_straightness",
     "kind": "swirl",
     "device": "cuda",
     "seed": 1234,
@@ -61,7 +50,6 @@
   "correction_strength": 0.12,
   "same_endpoint_pairs": true,
   "same_initial_noise": true,
-  "inference_without_generator": true,
   "support_curve_points": 1200,
   "discretization": {
     "triad": {
@@ -96,5 +84,5 @@
     }
   },
   "data_sha256": "759cfa8c87114d5b118f11dba0e67913fc642d15fb706cccf28b379c4acf112f",
-  "metric_note": "Endpoint distance is Euclidean. Historical paired RMSE is coordinate-wise RMS, not mean Euclidean distance. Legacy turning adds 1e-8 to a dot-product denominator and can inflate angles; both legacy and normalized-vector values are retained."
+  "metric_note": "Endpoint distance is Euclidean. Coordinate RMSE is the square root of the mean squared coordinate error. Turning angles use normalized displacement vectors; legacy_turning_degrees retains the values computed with 1e-8 added to the dot-product denominator."
 }

@@ -1,13 +1,7 @@
 {
-  "server": "super-server",
   "execution_device": "CPU, two Torch threads",
-  "archive": "/home/zzy/pythonprojects/BP-GI2SB/paper_figure_exports_20260801/toy_case2_checkpoint_trajectories.npz",
+  "archive": "data/case2_curved_multibranch/toy_case2_checkpoint_trajectories.npz",
   "archive_sha256": "31d5a0e381298387fd82b2bd176c9d37dca385ee9f19e077e00dbf9ddeac746a",
-  "checkpoint_sha256": {
-    "/home/zzy/pythonprojects/BP-GI2SB/runs_toy_curved_bp_endpoint_v4/checkpoints/latest.pt": "8fae449885096961ca78482a3e8d647066a319857c7cb1a63246ffc7adbda56f",
-    "/home/zzy/pythonprojects/BP-GI2SB/runs_toy_curved_single_v2/checkpoints/latest.pt": "0e7b53b45807667a87fa2f7954c7c677ccf5a98a3e34f1fc75eee7452524907b"
-  },
-  "export_script_sha256": "918a615036477583287d405d4b49af11fb184b5e5e185668eb0f88d3d72c01a6",
   "archive_replay_max_abs_error": {},
   "configs": {
     "triad": {
@@ -122,5 +116,5 @@
       "n": 4096
     }
   },
-  "interpretation": "One trained checkpoint per architecture; sample distributions are not training-seed uncertainty. The archived baseline is an MLP control, not original I2SB. Projection calls the learned bridge head; analytical curves are evaluation references only."
+  "interpretation": "One trained checkpoint per architecture. The baseline is a single-head multilayer perceptron. Geometric correction uses the learned bridge head; analytic curves are used for distance evaluation."
 }

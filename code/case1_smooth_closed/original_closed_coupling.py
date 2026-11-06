@@ -1,29 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Toy geometry demo for Bridge-Projected Geometry-aware I2SB (BP-GI2SB).
+"""Train and evaluate a three-head diffusion bridge on paired planar curves.
 
-This script is self-contained. It builds a paired low-dimensional coupling manifold
-(theta -> clean x0, degraded x1), trains a non-cancelling multi-head bridge model,
-and visualizes:
-  1) clean/degraded/bridge manifolds;
-  2) learned bridge projection m_theta;
-  3) reconstructed clean endpoint x0_hat;
-  4) deterministic bridge sampling trajectories with optional bridge-projection corrector.
-
-Key non-cancelling parameterization:
+For state x_t, time t, and terminal endpoint x1, the bridge, transport, and
+correction heads are m_theta, u_theta, and c_theta. The noise scale is sigma_t
+and the correction schedule is gamma(t):
     o_hat(x_t,t,x1) = (x_t - m_theta(x_t,t,x1)) / sigma_t
                       + u_theta(m_theta,t,x1)
                       + gamma(t) c_theta(x_t,m_theta,t,x1)
-
     x0_hat = m_theta - sigma_t * [u_theta + gamma(t)c_theta]
 
-The bridge head m_theta therefore affects both score construction and sampler correction.
-It cannot be algebraically cancelled away.
-
 Usage:
-    python toy_bp_gi2sb.py --steps 8000 --device cuda
-    python toy_bp_gi2sb.py --steps 3000 --device cpu --outdir toy_outputs
+    python code/case1_smooth_closed/original_closed_coupling.py --steps 20000 --device cuda
 """
 
 from __future__ import annotations
@@ -174,7 +162,7 @@ class MLP(nn.Module):
 
 
 class BPGI2SBToy(nn.Module):
-    """Non-cancelling multi-head BP-GI2SB toy network."""
+    """Three-head model for bridge coordinates, transport, and correction."""
 
     def __init__(self, hidden: int = 128, depth: int = 3, time_dim: int = 32):
         super().__init__()
@@ -524,7 +512,7 @@ def mean_nearest_distance_per_point(points: torch.Tensor, curve: torch.Tensor, c
 
 @torch.no_grad()
 def mmd_rbf(x: torch.Tensor, y: torch.Tensor, max_points: int = 512) -> float:
-    """Unbiased-enough RBF MMD with median heuristic for toy evaluation."""
+    """Squared RBF-kernel MMD with diagonal terms and a median bandwidth."""
     if x.shape[0] > max_points:
         idx = torch.randperm(x.shape[0], device=x.device)[:max_points]
         x = x[idx]
@@ -534,7 +522,7 @@ def mmd_rbf(x: torch.Tensor, y: torch.Tensor, max_points: int = 512) -> float:
 
     xy = torch.cat([x, y], dim=0)
     d2_all = torch.cdist(xy, xy).pow(2)
-    # median heuristic; avoid diagonal zeros dominating too much
+    # Estimate the bandwidth from positive pairwise squared distances.
     tri = d2_all[d2_all > 0]
     sigma2 = torch.median(tri).clamp_min(1e-6)
 
@@ -570,35 +558,22 @@ def trajectory_bridge_distance(
 
 @torch.no_grad()
 def trajectory_straightness_metrics(traj: torch.Tensor, x0_true: torch.Tensor, eps: float = 1e-8) -> Dict[str, float]:
-    """Quantify whether a sampled trajectory takes unnecessary detours.
+    """Compute path lengths, endpoint distances, and turning angles.
 
     Args:
-        traj: CPU or GPU tensor with shape [K+1, B, 2]. It contains the full reverse
-            trajectory from the degraded endpoint neighborhood to the clean endpoint.
-        x0_true: CPU or GPU tensor with shape [B, 2]. True paired clean endpoints.
-        eps: small number for numerical stability.
+        traj: sampled states, shape [K+1, B, 2].
+        x0_true: paired target endpoints, shape [B, 2].
+        eps: denominator offset for numerical stability.
 
     Metrics:
-        path_length:
-            Mean accumulated Euclidean length along the sampled trajectory.
-        chord_length:
-            Mean direct Euclidean distance between trajectory start and final sample.
-        path_tortuosity:
-            path_length / chord_length. This is the standard tortuosity / detour ratio.
-            It is >= 1 up to numerical error. Lower is better; 1 means perfectly straight.
-        path_efficiency:
-            chord_length / path_length = 1 / path_tortuosity. Higher is better.
-        excess_path_length:
-            path_length - chord_length. Lower is better.
-        target_path_ratio:
-            path_length / ||x_start - x0_true||. This compares the sampled path length
-            with the ideal paired endpoint displacement. It is useful for paired toy
-            tasks, but can be < 1 if the final sample under-shoots the true endpoint.
-        total_turning_angle_deg:
-            Sum of turning angles between consecutive segments, in degrees. Lower means
-            fewer sharp turns and less zig-zag motion.
-        mean_turning_angle_deg:
-            Average turning angle per internal step, in degrees.
+        path_length: accumulated Euclidean segment lengths.
+        chord_length: distance between the path's first and last states.
+        path_tortuosity: path_length / chord_length.
+        path_efficiency: chord_length / path_length.
+        excess_path_length: path_length - chord_length.
+        target_path_ratio: path_length / distance from the initial state to x0_true.
+        total_turning_angle_deg: sum of adjacent-segment angles, in degrees.
+        mean_turning_angle_deg: mean adjacent-segment angle, in degrees.
     """
     traj = traj.detach()
     x0_true = x0_true.detach().to(traj.device)
@@ -812,7 +787,7 @@ def save_quantitative_projection_comparison(
     rows = []
     for nfe in nfe_values:
         for rho in rho_values:
-            # No projection: keep rho in the row only for matched plotting.
+            # Retain rho as the plotting coordinate for the uncorrected sampler.
             rows.append(evaluate_one_sampler_setting(
                 model, kind, device, sigma_min, sigma_max, gamma_max,
                 rho_max=rho, n_steps=int(nfe), n_eval=n_eval, n_dense=n_dense,

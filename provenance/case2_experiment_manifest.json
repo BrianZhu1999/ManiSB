@@ -2,7 +2,6 @@
   "case": "Case II: Curved Multi-Branch Coupling",
   "task": "conditional endpoint transport with learned bridge-coordinate correction",
   "data_type": "synthetic analytic coupling",
-  "training_host": "super-server",
   "training_gpu": "NVIDIA GeForce RTX 4090",
   "torch_version": "2.6.0+cu118",
   "training_seed": 123,
@@ -13,11 +12,22 @@
   "endpoint_pairs": 4096,
   "projection_strength_max": 0.02,
   "projection_schedule": "sin2",
-  "reported_checkpoint_policy": "final checkpoint saved by the archived figure export",
-  "fairness_note": "The reported single-head and three-head checkpoints use different parameter counts and training budgets.",
+  "reported_checkpoint_policy": "final saved checkpoint",
   "paper_link": {
     "section": "Section 5.2",
-    "figure": "Figure 3",
+    "figure": "Figure 4",
     "appendix": "Appendix I"
+  },
+  "model_settings": {
+    "single": {
+      "parameters": 112706,
+      "training_steps": 50000,
+      "batch_size": 1024
+    },
+    "triad": {
+      "parameters": 301062,
+      "training_steps": 30000,
+      "batch_size": 256
+    }
   }
 }

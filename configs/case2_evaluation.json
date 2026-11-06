@@ -12,7 +12,7 @@
     "triadbridge": 0,
     "triad_plus_projection": 20
   },
-  "checkpoint_selection": "final checkpoint used by the archived figure export",
+  "checkpoint_selection": "final saved checkpoint",
   "metrics": [
     "endpoint_rmse",
     "mean_endpoint_distance",

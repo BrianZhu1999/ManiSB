@@ -1,34 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-train_curved_multibranch_toy_v2.py
+"""Train single-head and three-head diffusion bridges on curved paired branches.
 
-V2 changes compared with the first curved multi-branch toy script
------------------------------------------------------------------
-1. Stronger BP-GI2SB multi-head network:
-   - transport head sees backbone feature h as well as m_theta, t, x1
-   - correction head sees h, x_t, m_theta, t, x1
-   This keeps the non-canceling bridge-coordinate structure, but avoids making
-   u_theta too weak in the curved / multi-branch setting.
+The latent angle theta and branch label y specify target endpoints x0 and
+compressed terminal endpoints x1. The curved bridge support is M_t, kappa
+sets its curvature, s_t is the noise scale, and eps is Gaussian noise:
+    M_t(theta,y;kappa) = (1-t)x0 + t x1 + kappa sin(pi t) q(theta,y).
+    x_t = M_t + s_t eps.
 
-2. More conservative projection defaults for downstream evaluation:
-   - recommended rho_max is 0.01--0.05, not 0.2.
-
-3. Cleaner checkpoint args and helper functions for paired-batch evaluation
-   in eval_curved_multibranch_toy_v2.ipynb.
-
-Toy definition
---------------
-x0(theta,y): two clean branches.
-x1(theta,y): compressed degraded branches.
-M_t(theta,y;kappa) = (1-t)x0 + t x1 + kappa sin(pi t) q(theta,y).
-x_t = M_t + s_t eps.
-
-BP-GI2SB target:
-o_theta = (x_t - m_theta)/s_t + u_theta(h,m_theta,t,x1)
-          + gamma(t)c_theta(h,x_t,m_theta,t,x1)
-
-x0_hat = m_theta - s_t [u_theta + gamma(t)c_theta].
+The three-head model uses shared features h, bridge coordinates m_theta,
+transport u_theta, correction c_theta, and the schedule gamma(t):
+    o_theta = (x_t - m_theta)/s_t + u_theta(h,m_theta,t,x1)
+              + gamma(t)c_theta(h,x_t,m_theta,t,x1)
+    x0_hat = m_theta - s_t [u_theta + gamma(t)c_theta].
 """
 
 import argparse
@@ -189,18 +173,13 @@ class MLP(nn.Module):
 
 
 class BPModelV2(nn.Module):
-    """
-    Stronger non-canceling BP-GI2SB model.
+    """Three-head model with shared backbone features h.
 
     h = backbone(x_t,t,x1)
     m = bridge_head(h)
-
     u = u_theta(h,m,t,x1)
     c = c_theta(h,x_t,m,t,x1)
-
-    This still forces endpoint reconstruction through m:
-        x0_hat = m - s_t [u + gamma c]
-    but u/c are not artificially starved of the shared feature h.
+    x0_hat = m - s_t [u + gamma c].
     """
     def __init__(self, hidden: int = 192, depth: int = 3, gamma_max: float = 0.1, detach_m_for_heads: bool = False):
         super().__init__()

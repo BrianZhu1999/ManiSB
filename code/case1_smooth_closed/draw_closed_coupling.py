@@ -1,13 +1,8 @@
-"""重画用户截图中的原始平滑闭合曲线案例。"""
+"""Plot the smooth closed coupling and geometric-correction results."""
 from pathlib import Path
 import csv
 import hashlib
 import json
-import socket
-import sys
-
-if socket.gethostname().lower().replace('_', '-') != 'super-server':
-    raise RuntimeError('绘图与图像检查只能在 super-server 执行')
 
 import matplotlib as mpl
 mpl.use('Agg')
@@ -21,11 +16,11 @@ import numpy as np
 from scipy.spatial import cKDTree
 from PIL import Image
 
-BASE = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(BASE.parent/'multibranch_figure_20261002/qa_libs'))
-import pymupdf as fitz
+BASE = Path(__file__).resolve().parents[2]
+import fitz
 
-OUT = BASE/'output'
+OUT = BASE/'figures/case1_smooth_closed'
+RESULTS = BASE/'results/case1_smooth_closed'
 W, H = 340., 90.
 METHODS = ['triad', 'corrected']
 LABELS = ['No correction', 'Learned\ncorrection']
@@ -190,9 +185,10 @@ def draw_metric(fig, datasets, metric, x):
 
 
 def main():
-    OUT.mkdir(exist_ok=True)
-    report = json.loads((BASE/'data/data_audit.json').read_text())
-    path = BASE/'data/closed_coupling_data.npz'
+    OUT.mkdir(parents=True,exist_ok=True)
+    RESULTS.mkdir(parents=True,exist_ok=True)
+    report = json.loads((RESULTS/'data_audit.json').read_text())
+    path = BASE/'data/case1_smooth_closed/closed_coupling_data.npz'
     assert sha(path)==report['data_sha256']
     datasets = [dict(np.load(path))]
     fig = plt.figure(figsize=(W/25.4,H/25.4),dpi=150)
@@ -224,7 +220,7 @@ def main():
     collisions=[]
     for i,(name,a) in enumerate(visible):
         for name2,b in visible[i+1:]:
-            # 重复的不可见对侧刻度在 Matplotlib 中共享内容，忽略同一位置的同文本副本。
+            # Matplotlib can return duplicate tick labels at the same position.
             if name==name2 and np.allclose(a.bounds,b.bounds):
                 continue
             ix=min(a.x1,b.x1)-max(a.x0,b.x0)
@@ -241,7 +237,7 @@ def main():
     doc[0].get_pixmap(dpi=180).save(OUT/'pdf_preview.png')
     Image.open(OUT/'preview.png').convert('L').save(OUT/'grayscale_preview.png')
     metrics=[dict(method=name,**report['metrics'][name]) for name in METHODS]
-    with (OUT/'plotted_metrics.csv').open('w',newline='') as file:
+    with (RESULTS/'plotted_metrics.csv').open('w',newline='') as file:
         writer=csv.DictWriter(file,fieldnames=list(metrics[0]))
         writer.writeheader()
         writer.writerows(metrics)
@@ -249,14 +245,14 @@ def main():
             detail=detail,metric_axes=quantitative,text_outside_canvas=text_issues,
             typography_violations=typography,text_collisions=collisions,
             parameters=report['parameters'],
-            statistics='Same 1024 endpoint pairs and same initial noise. Boxes describe samples from one existing checkpoint; diamonds mark means.',
+            statistics='1024 paired samples per method from one training seed. Boxes span the interquartile range; diamonds mark means.',
             full_range=True,aggregate=report['metrics'],
             discretization=report['discretization'],
             fonts=[list(f) for f in doc[0].get_fonts()])
-    (OUT/'figure_qa.json').write_text(json.dumps(qa,indent=2),encoding='utf-8')
+    (RESULTS/'figure_qa.json').write_text(json.dumps(qa,indent=2),encoding='utf-8')
     print(json.dumps(qa,indent=2))
     if text_issues or typography or collisions:
-        raise RuntimeError('文字边界或字号检查未通过')
+        raise RuntimeError('Figure text bounds or typography checks failed.')
 
 
 if __name__=='__main__':

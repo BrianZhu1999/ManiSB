@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""静态检查 ManiSB 项目包的数据、图和配置。"""
+"""Check ManiSB data, figures, and configurations."""
 
 from __future__ import annotations
 
@@ -90,7 +90,7 @@ def main() -> int:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else {}
     report = {
         "project": manifest.get("project_name", "ManiSB"),
-        "root": str(root),
+        "root": ".",
         "status": "passed" if not checks else "failed",
         "errors": checks,
         "case1": case1,

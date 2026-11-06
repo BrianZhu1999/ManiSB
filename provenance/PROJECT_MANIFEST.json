@@ -21,7 +21,6 @@
       "figure": "figures/paper/fig3_multibranch_linear_v5.pdf"
     }
   ],
-  "training_policy": "Formal runs are archived with configurations, derived data, and verification records.",
-  "weights_policy": "binary checkpoints are stored outside the Git package",
-  "validation_entrypoint": "code/verify_project.py"
+  "validation_entrypoint": "code/verify_project.py",
+  "model_weights_included": false
 }

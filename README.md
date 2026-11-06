@@ -6,9 +6,8 @@ Code, data, and numerical studies for manifold-aware conditional diffusion bridg
 
 ## Overview
 
-How does the geometry of paired data enter a diffusion bridge, and what allows
-a model to learn that geometry? ManiSB studies these questions through a
-decomposition of the bridge prediction into three components:
+ManiSB studies the geometry and learning of conditional diffusion bridges
+through three components:
 
 - **Normal contraction:** attraction from a noisy state toward the intermediate
   bridge manifold.
@@ -40,7 +39,7 @@ bridge support.
 
 A two-branch coupling introduces distinct transport paths. The experiment
 compares a single-head model, a three-head model, and the three-head model with
-learned geometric correction across 4,096 paired evaluations.
+learned geometric correction across 4096 paired evaluations.
 
 [![Curved multi-branch coupling: endpoint branches, reverse paths, and error distributions](figures/paper/fig3_multibranch_linear_v5.png)](figures/paper/fig3_multibranch_linear_v5.pdf)
 
@@ -51,7 +50,7 @@ the [experiment guide](docs/experiments.md).
 
 ## Getting started
 
-The recorded environment uses Python 3.12.2 and PyTorch 2.6.0. Create an
+The experiments use Python 3.12.2 and PyTorch 2.6.0. Create an
 environment and install the dependencies:
 
 ```bash

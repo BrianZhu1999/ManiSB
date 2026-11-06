@@ -1,4 +1,4 @@
-"""检查 ManiSB 总包中的案例一图文件和派生数据。"""
+"""Check the Case I figures and trajectory data."""
 
 from __future__ import annotations
 
