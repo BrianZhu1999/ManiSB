@@ -1,7 +1,7 @@
 {
   "case": "curved_multi_branch_coupling",
   "model_type": "bp",
-  "seed": 123,
+  "seed": 456,
   "kappa": 0.6,
   "sigma_min": 0.02,
   "sigma_max": 0.7,
@@ -12,9 +12,9 @@
   "batch_size": 256,
   "hidden": 192,
   "depth": 3,
-  "learning_rate": 0.0002,
+  "learning_rate": 5e-05,
   "optimizer": "AdamW",
-  "weight_decay": 0.0,
+  "weight_decay": 1e-05,
   "gradient_clip": 1.0,
   "loss_weights": {
     "score": 1.0,
@@ -24,5 +24,77 @@
     "correction_regularization": 0.0001
   },
   "parameters": 301062,
-  "checkpoint_role": "three_head_endpoint_aware"
+  "checkpoint_role": "three_head_endpoint_aware",
+  "device": "cpu",
+  "torch_threads": 2,
+  "training_stage": "endpoint_fine_tuning_2",
+  "steps_definition": "Optimizer updates in this training stage.",
+  "total_training_steps": 100000,
+  "input_checkpoint": "runs/case2_triad_finetune_1/checkpoints/latest.pt",
+  "training_stages": [
+    {
+      "name": "initial_training",
+      "steps": 50000,
+      "seed": 123,
+      "device": "cuda",
+      "batch_size": 1024,
+      "optimizer": "AdamW",
+      "learning_rate": 0.0002,
+      "weight_decay": 0.0,
+      "gradient_clip": 1.0,
+      "loss_weights": {
+        "score": 1.0,
+        "bridge": 2.0,
+        "transport": 1.0,
+        "endpoint": 0.2,
+        "correction_regularization": 0.0001
+      },
+      "script": "code/case2_curved_multibranch/train_curved_multibranch_toy_v2.py",
+      "output_checkpoint": "runs/case2_triad_initial/checkpoints/latest.pt"
+    },
+    {
+      "name": "endpoint_fine_tuning_1",
+      "steps": 20000,
+      "seed": 123,
+      "device": "cpu",
+      "torch_threads": 2,
+      "batch_size": 256,
+      "optimizer": "AdamW",
+      "learning_rate": 0.0001,
+      "weight_decay": 1e-05,
+      "gradient_clip": 1.0,
+      "loss_weights": {
+        "score": 1.0,
+        "bridge": 1.0,
+        "transport": 0.5,
+        "endpoint": 2.0,
+        "correction_regularization": 0.0001
+      },
+      "script": "code/case2_curved_multibranch/finetune_endpoint_aware.py",
+      "input_checkpoint": "runs/case2_triad_initial/checkpoints/latest.pt",
+      "output_checkpoint": "runs/case2_triad_finetune_1/checkpoints/latest.pt"
+    },
+    {
+      "name": "endpoint_fine_tuning_2",
+      "steps": 30000,
+      "seed": 456,
+      "device": "cpu",
+      "torch_threads": 2,
+      "batch_size": 256,
+      "optimizer": "AdamW",
+      "learning_rate": 5e-05,
+      "weight_decay": 1e-05,
+      "gradient_clip": 1.0,
+      "loss_weights": {
+        "score": 1.0,
+        "bridge": 0.5,
+        "transport": 0.25,
+        "endpoint": 5.0,
+        "correction_regularization": 0.0001
+      },
+      "script": "code/case2_curved_multibranch/finetune_endpoint_strong.py",
+      "input_checkpoint": "runs/case2_triad_finetune_1/checkpoints/latest.pt",
+      "output_checkpoint": "runs/case2_triad/checkpoints/latest.pt"
+    }
+  ]
 }

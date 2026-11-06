@@ -60,7 +60,7 @@
     }
   },
   "checkpoint_steps": {
-    "triad": 50000,
+    "triad": 30000,
     "single": 50000
   },
   "parameters": {
@@ -68,7 +68,8 @@
     "single": 112706
   },
   "training_seeds": [
-    123
+    123,
+    456
   ],
   "evaluation_seed": 2026,
   "n_samples": 4096,
@@ -116,5 +117,15 @@
       "n": 4096
     }
   },
-  "interpretation": "One trained checkpoint per architecture. The baseline is a single-head multilayer perceptron. Geometric correction uses the learned bridge head; analytic curves are used for distance evaluation."
+  "interpretation": "One trained checkpoint per architecture. The baseline is a single-head multilayer perceptron. Geometric correction uses the learned bridge head; analytic curves are used for distance evaluation.",
+  "checkpoint_steps_definition": "Optimizer updates in the final training stage of each evaluated checkpoint.",
+  "total_training_steps": {
+    "triad": 100000,
+    "single": 50000
+  },
+  "configs_definition": "Arguments stored in the evaluated checkpoints. Executed optimizer settings and random seeds are given in training_configs.",
+  "training_configs": {
+    "single": "configs/case2_single.json",
+    "triad": "configs/case2_triad.json"
+  }
 }

@@ -15,4 +15,7 @@ python code/case2_curved_multibranch/verify_case2_package.py --root .
 案例二结果报告见 `results/case2_curved_multibranch/metrics_summary.json`，论文图
 见 `figures/paper/fig3_multibranch_linear_v5.pdf`。
 
-两个模型均采用多层感知机，训练随机种子为 123。各自的参数量、训练步数与批大小见配置文件。
+两个模型均采用多层感知机。单头模型训练 50000 步，种子为 123。三头模型先训练
+50000 步，再微调 20000 和 30000 步，累计 100000 步；三阶段的种子依次为
+123、123 和 456。两轮微调均采用 CPU 和两个 Torch 线程。完整参数及按阶段执行的
+命令见[训练说明](../../docs/experiments.md#training)。

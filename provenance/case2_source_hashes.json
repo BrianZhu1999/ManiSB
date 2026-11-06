@@ -12,22 +12,50 @@
     },
     "data/case2_curved_multibranch/toy_case2_checkpoint_trajectories.npz": {
       "sha256": "31d5a0e381298387fd82b2bd176c9d37dca385ee9f19e077e00dbf9ddeac746a"
+    },
+    "code/case2_curved_multibranch/finetune_endpoint_aware.py": {
+      "sha256": "559d29b9e08867194c4375caf6c7491e3680b8f2d79fa67462061a08b6846d25"
+    },
+    "code/case2_curved_multibranch/finetune_endpoint_strong.py": {
+      "sha256": "12c1ced167599c12a16fa6699e7b1c7bc6a5c01b3f6a4f0f3757b2e5e56686ca"
     }
   },
   "model_settings": {
     "single_head": {
       "parameters": 112706,
       "training_steps": 50000,
-      "batch_size": 1024
+      "batch_size": 1024,
+      "training_config": "configs/case2_single.json"
     },
     "three_head": {
       "parameters": 301062,
-      "training_steps": 30000,
-      "batch_size": 256
+      "training_steps": 100000,
+      "final_stage_steps": 30000,
+      "training_config": "configs/case2_triad.json"
     }
   },
   "seeds": {
-    "training": 123,
+    "training": {
+      "single_head": [
+        123
+      ],
+      "three_head": [
+        123,
+        123,
+        456
+      ]
+    },
     "evaluation": 2026
+  },
+  "training_steps_definition": "Total optimizer updates across the listed stages.",
+  "checkpoint_files": {
+    "single_head": {
+      "path": "checkpoints/single_latest.pt",
+      "sha256": "0e7b53b45807667a87fa2f7954c7c677ccf5a98a3e34f1fc75eee7452524907b"
+    },
+    "three_head": {
+      "path": "checkpoints/triad_latest.pt",
+      "sha256": "8fae449885096961ca78482a3e8d647066a319857c7cb1a63246ffc7adbda56f"
+    }
   }
 }

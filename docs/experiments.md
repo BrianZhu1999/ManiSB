@@ -81,19 +81,34 @@ are included.
 
 The evaluation uses curvature `kappa=0.6`, 4096 endpoint pairs, 20 reverse
 updates, and a maximum correction strength of 0.02 with a sine-squared schedule.
-Training uses seed 123; evaluation uses seed 2026.
+Evaluation uses seed 2026. Training seeds and updates are listed by stage below.
 
 The noise scale at bridge time `t` is
 `s(t) = 0.02 + 0.70 * sqrt(t * (1 - t))`.
 
-| Model | Parameters | Training updates | Batch size |
-| --- | ---: | ---: | ---: |
-| Single head | 112706 | 50000 | 1024 |
-| Three head | 301062 | 30000 | 256 |
+| Model | Parameters | Total training updates |
+| --- | ---: | ---: |
+| Single head | 112706 | 50000 |
+| Three head | 301062 | 100000 |
 
 Both models are multilayer perceptrons with hidden width 192 and depth 3.
-Training uses AdamW, learning rate 0.0002, weight decay 0, and gradient
-clipping at 1.
+The three-head model uses 50000 initial updates followed by two endpoint-aware
+fine-tuning stages of 20000 and 30000 updates. Each fine-tuning stage starts
+from the preceding checkpoint and initializes a new AdamW optimizer.
+Gradient clipping is 1 throughout.
+
+| Model and stage | Updates | Seed | Batch size | Learning rate | Weight decay | Device |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Single head | 50000 | 123 | 1024 | 0.0002 | 0 | GPU |
+| Three head, initial | 50000 | 123 | 1024 | 0.0002 | 0 | GPU |
+| Three head, fine-tuning 1 | 20000 | 123 | 256 | 0.0001 | 0.00001 | CPU, 2 Torch threads |
+| Three head, fine-tuning 2 | 30000 | 456 | 256 | 0.00005 | 0.00001 | CPU, 2 Torch threads |
+
+| Three-head stage | Score loss | Bridge loss | Transport loss | Endpoint loss | Correction regularization |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Initial | 1 | 2 | 1 | 0.2 | 0.0001 |
+| Fine-tuning 1 | 1 | 1 | 0.5 | 2 | 0.0001 |
+| Fine-tuning 2 | 1 | 0.5 | 0.25 | 5 | 0.0001 |
 
 | Method | Endpoint RMSE | Mean endpoint distance | Mean path-support distance |
 | --- | ---: | ---: | ---: |
@@ -105,7 +120,7 @@ Here endpoint RMSE is the square root of the mean squared Euclidean endpoint
 distance. Case I's coordinate-wise RMSE additionally averages over its two
 coordinates. The model configurations are
 [single head](../configs/case2_single.json),
-[three head](../configs/case2_triad.json), and
+[three-head training stages](../configs/case2_triad.json), and
 [evaluation](../configs/case2_evaluation.json).
 
 ## Training
@@ -123,21 +138,41 @@ python code/case2_curved_multibranch/train_curved_multibranch_toy_v2.py \
   --lambda_score 1.0 --lambda_endpoint 0.2
 ```
 
-Three head:
+Three head, initial training:
 
 ```bash
 python code/case2_curved_multibranch/train_curved_multibranch_toy_v2.py \
-  --model_type bp --outdir runs/case2_triad --device cuda \
+  --model_type bp --outdir runs/case2_triad_initial --device cuda \
   --seed 123 --kappa 0.6 --sigma_min 0.02 --sigma_max 0.7 \
-  --steps 30000 --batch_size 256 --hidden 192 --depth 3 \
+  --steps 50000 --batch_size 1024 --hidden 192 --depth 3 \
   --lr 2e-4 --weight_decay 0 --grad_clip 1.0 \
-  --lambda_score 1.0 --lambda_bridge 0.5 --lambda_transport 0.25 \
-  --lambda_endpoint 5.0 --lambda_corr 1e-4
+  --lambda_score 1.0 --lambda_bridge 2.0 --lambda_transport 1.0 \
+  --lambda_endpoint 0.2 --lambda_corr 1e-4
 ```
 
-Each command writes `checkpoints/latest.pt`, numbered checkpoints,
-`train_losses.csv`, and a `visuals/` directory under the specified output
-directory. Checkpoint metadata includes the model arguments.
+Three head, first fine-tuning stage (20000 updates):
+
+```bash
+python code/case2_curved_multibranch/finetune_endpoint_aware.py \
+  --source runs/case2_triad_initial/checkpoints/latest.pt \
+  --outdir runs/case2_triad_finetune_1
+```
+
+Three head, second fine-tuning stage (30000 updates):
+
+```bash
+python code/case2_curved_multibranch/finetune_endpoint_strong.py \
+  --source runs/case2_triad_finetune_1/checkpoints/latest.pt \
+  --outdir runs/case2_triad
+```
+
+The initial-training commands write `checkpoints/latest.pt`, numbered
+checkpoints, `train_losses.csv`, and a `visuals/` directory. Each fine-tuning
+command uses the fixed stage settings in the tables above and writes
+`checkpoints/latest.pt`, a numbered checkpoint, and `finetune_config.json`.
+The fine-tuning files record the parent checkpoint, loss history, and executed
+stage settings. The final three-head checkpoint is
+`runs/case2_triad/checkpoints/latest.pt`.
 
 The release contains derived trajectory archives. Evaluation from model
 weights uses the checkpoint files described in

@@ -1,6 +1,5 @@
 {
   "case": "curved_multi_branch_coupling",
-  "training_seed": 123,
   "evaluation_seed": 2026,
   "kappa": 0.6,
   "reverse_updates": 20,
@@ -19,5 +18,15 @@
     "trajectory_support_distance",
     "excess_path_length",
     "branch_accuracy"
-  ]
+  ],
+  "training_seeds": {
+    "single": [
+      123
+    ],
+    "triad": [
+      123,
+      123,
+      456
+    ]
+  }
 }
